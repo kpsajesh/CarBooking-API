@@ -17,10 +17,13 @@ namespace CarBookingData.DataModels
 
         [ForeignKey(nameof(Make))]
         public int MakeId { get; set; }
-        public Make? Make { get; set; }
 
-        public List<Style>? Styles { get; set; }
-        public List<Make>? Makes { get; set; }
-        public List<Car>? Cars { get; set; }
+
+        [NotMapped]
+        public virtual Make Make { get; set; }
+        
+        public List<Style> Styles { get; set; }        
+        public List<Make> Makes { get; set; }
+        public List<Car> Cars { get; set; }
     }
 }

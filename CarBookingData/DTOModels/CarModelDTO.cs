@@ -9,6 +9,30 @@ using System.Threading.Tasks;
 
 namespace CarBookingData.DTOModels
 {
+    // This is for the CatrModel basic record
+    public class CarModelDTO
+    {
+        public int Id { get; set; }
+
+        [Required]
+        [Display(Name = "Car Model")]
+        public string? Name { get; set; }
+
+        // these are to fetch the details of other DTO from other DTOs
+        //eg: Give all the cars and Makes based on Carmodel
+        public List<StyleDTO>? Styles { get; set; }
+        public List<MakeDTO>? Makes { get; set; }
+        public List<CarDTO>? Cars { get; set; }
+    }
+
+    //This is with all information of carModel record
+    public class CarModelAllInfoDTO : CarModelDTO
+    {
+        public string? CreatedBy { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime UpdatedDate { get; set; }
+    }
     // This is for the create operations, so PK id is not needed, it will be generated automatically
     public class CreateCarModelDTO
     {
@@ -24,18 +48,17 @@ namespace CarBookingData.DTOModels
 
     // This is for all other operations except create.
     // Can have seperate DTOs for each operations, ie one DTO for update all fields, another DTO for updating some specific fields 
-    public class CarModelDTO : CreateCarModelDTO
+    
+    public class CarModelUpdateDTO
     {
         public int Id { get; set; }
+        [Required]
+        [Display(Name = "Car Model")]
+        public string? Name { get; set; }
+        [Required]
+        public int MakeId { get; set; }// We need to pass only the PK of Make ID for create scenario
         public string? UpdatedBy { get; set; }
         public DateTime UpdatedDate { get; set; }
-        public MakeDTO? Make { get; set; } // This will give all the fields defined in the MakeDTO
-
-
-        // these are to fetch the details of other DTO from other DTOs
-        //eg: Give all the cars and Makes based on Carmodel
-        public List<StyleDTO>? Styles { get; set; }
-        public List<MakeDTO>? Makes { get; set; }
-        public List<CarDTO>? Cars { get; set; }
     }
+
 }

@@ -38,7 +38,6 @@ namespace CarBooking_API
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddCors(o => { // For Defining the access policy
                 o.AddPolicy("AllowAll", builder =>
@@ -49,12 +48,18 @@ namespace CarBooking_API
 
             services.AddAutoMapper(typeof(MapperInitialiser));
 
+            //Not needed to register the IGENRIIC class as we have made the UnitofWork with injecting the DB Context
+            //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+
+            services.AddTransient<IUnitofWork, UnitofWork>();
+
             services.AddSwaggerGen(c => // Swagger automatically creates the API documentation for the developers who are using the API endpoints
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Booking API", Version = "v1" });
             });
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(op =>
+            op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
         }
 

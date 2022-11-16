@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.ConstrainedExecution;
 using System.Text;
@@ -15,9 +16,9 @@ namespace CarBookingData.DataModels
         [Required]
         public string? Name { get; set; }
 
-
-        public List<Make>? Makes { get; set; }
-        public List<Car>? Cars { get; set; }
+        
+        public List<Make> Makes { get; set; }        
+        public List<Car> Cars { get; set; }
         public virtual List<CarModel>? CarModels { get; set; }
 
     }

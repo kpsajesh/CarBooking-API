@@ -48,11 +48,15 @@ namespace CarBookingData.DTOModels
     public class CarDTO : CreateCarDTO
     {
         public int Id { get; set; }
-        public string? UpdatedBy { get; set; }
-        public DateTime UpdatedDate { get; set; }
 
         public MakeDTO? Make { get; set; } // This will give all the fields defined in the MakeDTO
         public StyleDTO? Style { get; set; } // This will give all the fields defined in the StyleDTO
         public CarModelDTO? CarModel { get; set; } // This will give all the fields defined in the CarModelDTO
+    }
+
+    public class CarUpdateDTO : CarDTO
+    {
+        public string? UpdatedBy { get; set; }
+        public DateTime UpdatedDate { get; set; }
     }
 }

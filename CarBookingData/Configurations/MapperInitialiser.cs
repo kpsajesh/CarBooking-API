@@ -19,11 +19,14 @@ namespace CarBookingData.Configurations
             CreateMap<Make, CreateMakeDTO>().ReverseMap();
             CreateMap<Make, MakeDTO>().ReverseMap();
 
-            CreateMap<CarModel, CreateCarModelDTO>().ReverseMap();
             CreateMap<CarModel, CarModelDTO>().ReverseMap();
+            CreateMap<CarModel, CarModelAllInfoDTO>().ReverseMap();
+            CreateMap<CarModel, CreateCarModelDTO>().ReverseMap();
+            CreateMap<CarModel, CarModelUpdateDTO>().ReverseMap();
 
             CreateMap<Car, CreateCarDTO>().ReverseMap();
             CreateMap<Car, CarDTO>().ReverseMap();
+            CreateMap<Car, CarUpdateDTO>().ReverseMap();
         }
     }
 }

@@ -24,7 +24,8 @@ namespace CarBooking_API
                 ).CreateLogger();
             try
             {
-                Log.Information("\n\nApplication is Startting"); // SeriLog just updates the application is starting
+                Log.Information("\n\n"); // SeriLog just updates the application is starting
+                Log.Information("Application is Starting"); // SeriLog just updates the application is starting
                 CreateHostBuilder(args).Build().Run();                
             }
             catch(Exception ex)

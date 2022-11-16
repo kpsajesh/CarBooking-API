@@ -28,23 +28,27 @@ namespace CarBookingData.DataModels
         [ForeignKey(nameof(Make))] // DbContext automatically identify this a FK even without this line
         [Required]
         [Display(Name = "Make")]
-        public int MakeId { get; set; }
-        public virtual Make? Make { get; set; } // It is known as the navigation property, which will help to get all columns in the second table like join
-
+        public int MakeId { get; set; }        
+        
         [ForeignKey(nameof(Style))]
         [Required]
         [Display(Name = "Style")]
         public int StyleId { get; set; }
-        public virtual Style? Style { get; set; }// It is known as the navigation property, which will help to get all columns in the second table like join
 
         [Display(Name = "Plate No")]
-        public string? RegnNo { get; set; }
+        public string RegnNo { get; set; }
 
         [ForeignKey(nameof(CarModel))]
         [Required]
         [Display(Name = "Model")]
         public int CarModelId { get; set; }
-        public virtual CarModel? CarModel { get; set; } // It can be written without virtual also like public CarModel CarModel { get; set; }
+
+        [NotMapped]
+        public virtual Make Make { get; set; } // It is known as the navigation property, which will help to get all columns in the second table like join
+        [NotMapped]
+        public virtual CarModel CarModel { get; set; } // It can be written without virtual also like public CarModel CarModel { get; set; }
+        [NotMapped]
+        public virtual Style Style { get; set; }// It is known as the navigation property, which will help to get all columns in the second table like join
 
     }
 }
