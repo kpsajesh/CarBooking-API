@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,8 @@ using System.Threading.Tasks;
 
 namespace CarBookingData.DataModels
 {
-    public class CarBookingDbContext : DbContext
+    //public class CarBookingDbContext : DbContext
+    public class CarBookingDbContext : IdentityDbContext
     {
         public CarBookingDbContext(DbContextOptions<CarBookingDbContext> options) : base(options)
         {
