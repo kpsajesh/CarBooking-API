@@ -47,19 +47,27 @@ namespace CarBookingRepository.Repositories
             //if(expression!=null)
             return await query.AsNoTracking().ToListAsync();
         }
-        //[return: MaybeNull]
+
+
         public async Task<TEntity> Get(Expression<Func<TEntity, bool>>? expression, 
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+            //List<string> include = null)
+            Func<IQueryable<TEntity>,IIncludableQueryable<TEntity, object>>? include = null)
+            
         {
             IQueryable<TEntity> query = _db;
 
             if(include!= null)
             {
+               /* foreach (var includeProperty in include)
+                {
+                    query = query.Include(includeProperty);
+                }*/
                 query = include(query);
             }
-            //if(expression!=null)
             return await query.AsNoTracking().FirstOrDefaultAsync(expression);
         }
+
+
         /*public async Task<IPagedList<TEntity>> GetPagedList(
             RequestParams requestParams,
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null
@@ -74,6 +82,8 @@ namespace CarBookingRepository.Repositories
             return await query.AsNoTracking()
                 .ToPagedListAsync(requestParams.PageNumber, requestParams.PageSize);
         }*/
+
+
         public async Task Insert(TEntity entity)
         {
             await _db.AddAsync(entity);

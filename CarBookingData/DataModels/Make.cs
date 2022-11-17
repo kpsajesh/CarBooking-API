@@ -16,9 +16,12 @@ namespace CarBookingData.DataModels
         [Required]
         [Display(Name = "Make")]
         public string? Name { get; set; }
-        
-        public List<Style> Styles { get; set; }
-        public List<Car> Cars { get; set; }
-        public virtual List<CarModel>? CarModels { get; set; }
+
+        [NotMapped]
+        public CarModel CarModel { get; set; }
+
+        public virtual IList<Style> Styles { get; set; }
+        public virtual IList<Car> Cars { get; set; }
+        public virtual IList<CarModel> CarModels { get; set; }
     }
 }

@@ -20,10 +20,10 @@ namespace CarBookingData.DataModels
 
 
         [NotMapped]
-        public virtual Make Make { get; set; }
-        
-        public List<Style> Styles { get; set; }        
-        public List<Make> Makes { get; set; }
-        public List<Car> Cars { get; set; }
+        public Make Make { get; set; }
+
+        public virtual IList<Style> Styles { get; set; }        
+        public virtual IList<Make> Makes { get; set; }
+        public virtual IList<Car> Cars { get; set; }
     }
 }

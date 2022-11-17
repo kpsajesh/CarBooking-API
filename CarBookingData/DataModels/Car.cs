@@ -50,5 +50,9 @@ namespace CarBookingData.DataModels
         [NotMapped]
         public virtual Style Style { get; set; }// It is known as the navigation property, which will help to get all columns in the second table like join
 
+        public virtual IList<Style> Styles { get; set; }
+        public virtual IList<Make> Makes { get; set; }
+        public virtual IList<CarModel> CarModels { get; set; }
+
     }
 }

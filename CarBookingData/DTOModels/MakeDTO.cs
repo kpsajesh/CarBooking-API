@@ -28,8 +28,8 @@ namespace CarBookingData.DTOModels
 
         // these are to fetch the details of other DTO from other DTOs
         //eg: Give all the cars and models based on Style
-        public List<StyleDTO>? Styles { get; set; }
-        public List<CarDTO>? Cars { get; set; }
+        public virtual IList<StyleDTO>? Styles { get; set; }
+        public virtual IList<CarDTO>? Cars { get; set; }
         public virtual List<CarModelDTO>? CarModels { get; set; }
 
     }
