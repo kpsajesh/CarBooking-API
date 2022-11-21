@@ -19,11 +19,11 @@ namespace CarBookingData.DataModels
         public int MakeId { get; set; }
 
 
-        [NotMapped]
-        public Make Make { get; set; }
+        /*[NotMapped]
+        public Make Make { get; set; }*/
 
-        public virtual IList<Style> Styles { get; set; }        
+        /*public virtual IList<Style> Styles { get; set; }        
         public virtual IList<Make> Makes { get; set; }
-        public virtual IList<Car> Cars { get; set; }
+        public virtual IList<Car> Cars { get; set; }*/
     }
 }

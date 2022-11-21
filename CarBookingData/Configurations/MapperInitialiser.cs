@@ -27,6 +27,9 @@ namespace CarBookingData.Configurations
             CreateMap<Car, CreateCarDTO>().ReverseMap();
             CreateMap<Car, CarDTO>().ReverseMap();
             CreateMap<Car, CarUpdateDTO>().ReverseMap();
+
+            CreateMap<ApiUser, UserDTO>().ReverseMap();
+            //CreateMap<ApiUser, LoginUserDTO>().ReverseMap(); //NotNeeded
         }
     }
 }

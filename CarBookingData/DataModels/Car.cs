@@ -43,16 +43,16 @@ namespace CarBookingData.DataModels
         [Display(Name = "Model")]
         public int CarModelId { get; set; }
 
-        [NotMapped]
+        /*[NotMapped]
         public virtual Make Make { get; set; } // It is known as the navigation property, which will help to get all columns in the second table like join
         [NotMapped]
         public virtual CarModel CarModel { get; set; } // It can be written without virtual also like public CarModel CarModel { get; set; }
         [NotMapped]
-        public virtual Style Style { get; set; }// It is known as the navigation property, which will help to get all columns in the second table like join
+        public virtual Style Style { get; set; }// It is known as the navigation property, which will help to get all columns in the second table like join*/
 
-        public virtual IList<Style> Styles { get; set; }
+        /*public virtual IList<Style> Styles { get; set; }
         public virtual IList<Make> Makes { get; set; }
-        public virtual IList<CarModel> CarModels { get; set; }
+        public virtual IList<CarModel> CarModels { get; set; }*/
 
     }
 }

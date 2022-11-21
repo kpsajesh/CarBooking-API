@@ -17,9 +17,9 @@ namespace CarBookingData.DataModels
         public string? Name { get; set; }
 
         
-        public List<Make> Makes { get; set; }        
+        /*public List<Make> Makes { get; set; }        
         public List<Car> Cars { get; set; }
-        public virtual List<CarModel>? CarModels { get; set; }
+        public virtual List<CarModel>? CarModels { get; set; }*/
 
     }
 }

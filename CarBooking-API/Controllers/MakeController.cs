@@ -27,6 +27,7 @@ namespace CarBooking_API.Controllers
         }
 
         [HttpGet]
+        //[Route("GetMakes")] // Can be used with a post method
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMakes()
@@ -46,6 +47,7 @@ namespace CarBooking_API.Controllers
         }
 
         [HttpGet("{id:int}", Name= "GetMakesWithId")]
+        //[Route("GetMakesWithId")] // Can be used with a post method
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMakesWithId(int id)

@@ -4,6 +4,7 @@ using CarBookingData.DataModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarBookingData.Migrations
 {
     [DbContext(typeof(CarBookingDbContext))]
-    partial class CarBookingDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221117233311_AddedUserIdentity")]
+    partial class AddedUserIdentity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,6 +44,7 @@ namespace CarBookingData.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
@@ -68,6 +71,7 @@ namespace CarBookingData.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecondName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
@@ -119,6 +123,7 @@ namespace CarBookingData.Migrations
                         .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("RegnNo")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StyleId")
@@ -174,21 +179,21 @@ namespace CarBookingData.Migrations
                         {
                             Id = 6,
                             CreatedBy = "Sajesh",
-                            CreatedDate = new DateTime(2022, 11, 18, 12, 42, 25, 421, DateTimeKind.Local).AddTicks(7287),
+                            CreatedDate = new DateTime(2022, 11, 17, 23, 33, 11, 211, DateTimeKind.Local).AddTicks(3784),
                             MakeId = 4,
                             Name = "Jazz",
                             UpdatedBy = "Sajesh",
-                            UpdatedDate = new DateTime(2022, 11, 18, 12, 42, 25, 421, DateTimeKind.Local).AddTicks(7292)
+                            UpdatedDate = new DateTime(2022, 11, 17, 23, 33, 11, 211, DateTimeKind.Local).AddTicks(3787)
                         },
                         new
                         {
                             Id = 7,
                             CreatedBy = "Sajesh",
-                            CreatedDate = new DateTime(2022, 11, 18, 12, 42, 25, 421, DateTimeKind.Local).AddTicks(7295),
+                            CreatedDate = new DateTime(2022, 11, 17, 23, 33, 11, 211, DateTimeKind.Local).AddTicks(3790),
                             MakeId = 5,
                             Name = "RX400",
                             UpdatedBy = "Sajesh",
-                            UpdatedDate = new DateTime(2022, 11, 18, 12, 42, 25, 421, DateTimeKind.Local).AddTicks(7297)
+                            UpdatedDate = new DateTime(2022, 11, 17, 23, 33, 11, 211, DateTimeKind.Local).AddTicks(3791)
                         });
                 });
 
@@ -225,19 +230,19 @@ namespace CarBookingData.Migrations
                         {
                             Id = 4,
                             CreatedBy = "Sajesh",
-                            CreatedDate = new DateTime(2022, 11, 18, 12, 42, 25, 421, DateTimeKind.Local).AddTicks(7014),
+                            CreatedDate = new DateTime(2022, 11, 17, 23, 33, 11, 211, DateTimeKind.Local).AddTicks(3595),
                             Name = "Honda",
                             UpdatedBy = "Sajesh",
-                            UpdatedDate = new DateTime(2022, 11, 18, 12, 42, 25, 421, DateTimeKind.Local).AddTicks(7088)
+                            UpdatedDate = new DateTime(2022, 11, 17, 23, 33, 11, 211, DateTimeKind.Local).AddTicks(3637)
                         },
                         new
                         {
                             Id = 5,
                             CreatedBy = "Sajesh",
-                            CreatedDate = new DateTime(2022, 11, 18, 12, 42, 25, 421, DateTimeKind.Local).AddTicks(7092),
+                            CreatedDate = new DateTime(2022, 11, 17, 23, 33, 11, 211, DateTimeKind.Local).AddTicks(3641),
                             Name = "Mercides",
                             UpdatedBy = "Sajesh",
-                            UpdatedDate = new DateTime(2022, 11, 18, 12, 42, 25, 421, DateTimeKind.Local).AddTicks(7095)
+                            UpdatedDate = new DateTime(2022, 11, 17, 23, 33, 11, 211, DateTimeKind.Local).AddTicks(3642)
                         });
                 });
 
@@ -295,22 +300,6 @@ namespace CarBookingData.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "23fae0de-b8a2-4c24-975a-e0c490d06bd6",
-                            ConcurrencyStamp = "b952b3bc-3064-40fd-82f6-c8ae6ee22248",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "748fc736-2384-4420-aac6-d21e7aaa7ccc",
-                            ConcurrencyStamp = "fc792379-6be4-40f1-926e-66a87165152c",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

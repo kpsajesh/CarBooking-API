@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using CarBookingData.Configurations.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 namespace CarBookingData.DataModels
 {
     //public class CarBookingDbContext : DbContext
-    public class CarBookingDbContext : IdentityDbContext
+    public class CarBookingDbContext : IdentityDbContext<ApiUser>
     {
         public CarBookingDbContext(DbContextOptions<CarBookingDbContext> options) : base(options)
         {
@@ -22,7 +23,14 @@ namespace CarBookingData.DataModels
 
         protected override void OnModelCreating(ModelBuilder builder) // This is for seeding data to the database tables
         {
-            builder.Entity<Make>().HasData(
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new MakeConfiguration()); // this is for the data seeding to the make table, it is optional
+            builder.ApplyConfiguration(new CarModelConfiguration()); // this is for the data seeding to the CarModel table, it is optional
+
+            builder.ApplyConfiguration(new RoleConfiguration()); // this is for the data seeding to the Role table to create the user roles
+
+            /*builder.Entity<Make>().HasData( // this code moved to MakeConfiguration class under Configurations / Entities folder. This is working code
                 new Make
                 {
                     Id = 4,
@@ -41,9 +49,9 @@ namespace CarBookingData.DataModels
                     UpdatedBy = "Sajesh",
                     UpdatedDate = DateTime.Now
                 }
-                );
+                );*/
 
-            builder.Entity<CarModel>().HasData(
+            /*builder.Entity<CarModel>().HasData( // this code moved to CarModelConfiguration class under Configurations / Entities folder. This is working code
                 new CarModel
                 {
                     Id = 6,
@@ -64,7 +72,7 @@ namespace CarBookingData.DataModels
                     UpdatedDate = DateTime.Now,
                     MakeId = 5
                 }
-                );
+                );*/
         }
     }
 }

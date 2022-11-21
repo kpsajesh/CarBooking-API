@@ -17,11 +17,11 @@ namespace CarBookingData.DataModels
         [Display(Name = "Make")]
         public string? Name { get; set; }
 
-        [NotMapped]
-        public CarModel CarModel { get; set; }
+        /*[NotMapped]
+        public CarModel CarModel { get; set; }*/
 
-        public virtual IList<Style> Styles { get; set; }
+        /*public virtual IList<Style> Styles { get; set; }
         public virtual IList<Car> Cars { get; set; }
-        public virtual IList<CarModel> CarModels { get; set; }
+        public virtual IList<CarModel> CarModels { get; set; }*/
     }
 }
