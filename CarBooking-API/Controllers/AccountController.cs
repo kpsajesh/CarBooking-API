@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CarBookingData.DataModels;
 using CarBookingData.DTOModels;
+using CarBookingRepository.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,16 +18,19 @@ namespace CarBooking_API.Controllers
         //private readonly SignInManager<ApiUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IMapper _mapper;
+        private readonly IAuthManager _authManager;
 
         public AccountController(UserManager<ApiUser> userManager,
             //SignInManager<ApiUser> signInManager,
             ILogger<AccountController> logger,
-            IMapper mapper)
+            IMapper mapper,
+            IAuthManager authManager)
         {
             _userManager = userManager;
             //_signInManager = signInManager;
             _logger = logger;
             _mapper = mapper;
+            _authManager = authManager;
         }
 
         [HttpPost]
@@ -75,5 +79,30 @@ namespace CarBooking_API.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("Login")]
+        public async Task<ActionResult> Login([FromBody] LoginUserDTO userDTO)
+        {
+            _logger.LogInformation($"Registration Attempt for {userDTO.Email}");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                if(!await _authManager.ValidateUser(userDTO))
+                {
+                    return Unauthorized();
+                }
+                return Accepted(new { Token =await _authManager.CreateToken()});
+            }
+            catch (System.Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(Login)}");
+                //return Problem($"Something went wrong in the {nameof(Login)}", statusCode: 500);
+                return StatusCode(500, ex.ToString());
+            }
+        }
     }
 }

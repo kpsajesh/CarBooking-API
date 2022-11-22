@@ -3,6 +3,7 @@ using CarBookingData.Configurations;
 using CarBookingData.DataModels;
 using CarBookingRepository.Contracts;
 using CarBookingRepository.Repositories;
+using CarBookingRepository.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -43,6 +44,8 @@ namespace CarBooking_API
             services.AddAuthentication();
             services.ConfigureIdentity();
 
+            services.ConfigureJWT(Configuration);
+
             services.AddCors(o => { // For Defining the access policy
                 o.AddPolicy("AllowAll", builder =>
                             builder.AllowAnyOrigin()
@@ -56,6 +59,7 @@ namespace CarBooking_API
             //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
             services.AddTransient<IUnitofWork, UnitofWork>();
+            services.AddScoped<IAuthManager, AuthManager>();
 
             services.AddSwaggerGen(c => // Swagger automatically creates the API documentation for the developers who are using the API endpoints
             {
