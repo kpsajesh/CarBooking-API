@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using CarBookingData.DataModels;
 using CarBookingData.DTOModels;
 using CarBookingRepository.Contracts;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,7 @@ namespace CarBooking_API.Controllers
             _mapper = mapper;
             //_logger = (ILogger<CarModelController>) logger;
         }
+        
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -46,6 +49,8 @@ namespace CarBooking_API.Controllers
                 //return StatusCode(500, ex.ToString());
             }
         }
+
+        //[Authorize]
         [HttpGet("{id:int}",Name = "GetCarModelsWithId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -65,6 +70,36 @@ namespace CarBooking_API.Controllers
                 return StatusCode(500, ex.ToString());
             }
         }
+
+        //[Authorize(Roles = "Administrator")] // can authorise based on roles, policy
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> CreateCarModel([FromBody] CreateCarModelDTO CarModelDTO)
+        {
+            _logger.LogInformation($"Invalid POST Attempt for {nameof(CreateCarModel)}");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var carModel = _mapper.Map<CarModel>(CarModelDTO);
+                await _unitofWork.CarModels.Insert(carModel); // Inserts the given data
+                await _unitofWork.Save(); // saves the insert
+
+                return CreatedAtRoute("GetCarModelsWithId", new { id = carModel.Id }, carModel); // calling the above API method GetCarModelsWithId to fetch the data of newly created record
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(CreateCarModel)}");
+                return Problem($"Something went wrong in the {nameof(CreateCarModel)}", statusCode: 500);
+                //return StatusCode(500, ex.ToString());                
+            }
+        }
+
 
     }
 }

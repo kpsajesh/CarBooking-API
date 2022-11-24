@@ -23,7 +23,7 @@ namespace CarBookingData.DataModels
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration Configuration)
         {
             var  jwtSettings= Configuration.GetSection("Jwt");
-            var ApiKey = Environment.GetEnvironmentVariable("CarAPIKey"); // which is registered in the cmd
+            var ApiKey = "f09ed3fb - 4e12 - 42aa - b097 - 459d06af1b56"; //Environment.GetEnvironmentVariable("CarAPIKey"); // which is registered in the cmd
 
             services.AddAuthentication(o =>
             {

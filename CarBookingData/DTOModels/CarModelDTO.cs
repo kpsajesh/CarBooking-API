@@ -31,7 +31,7 @@ namespace CarBookingData.DTOModels
         public string? CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
         public string? UpdatedBy { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        //public DateTime UpdatedDate { get; set; }
     }
     // This is for the create operations, so PK id is not needed, it will be generated automatically
     public class CreateCarModelDTO
@@ -40,7 +40,7 @@ namespace CarBookingData.DTOModels
         [Display(Name = "Car Model")]
         public string? Name { get; set; }
         public string? CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
+        //public DateTime CreatedDate { get; set; }
 
         [Required]
         public int MakeId { get; set; }// We need to pass only the PK of Make ID for create scenario

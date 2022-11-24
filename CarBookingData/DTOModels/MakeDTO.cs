@@ -15,7 +15,7 @@ namespace CarBookingData.DTOModels
         [Display(Name = "Make")]
         public string? Name { get; set; }
         public string? CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
+        //public DateTime CreatedDate { get; set; }
     }
 
     // This is for all other operations except create.
@@ -24,7 +24,7 @@ namespace CarBookingData.DTOModels
     {
         public int Id { get; set; }
         public string? UpdatedBy { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        //public DateTime UpdatedDate { get; set; }
 
         // these are to fetch the details of other DTO from other DTOs
         //eg: Give all the cars and models based on Style

@@ -83,10 +83,11 @@ namespace CarBooking_API
 
             app.UseHttpsRedirection();
 
-            app.UseCors("AllowAll");
+            app.UseCors("AllowAll");// Applying the AllowAll rule defined above.
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
