@@ -56,6 +56,11 @@ namespace CarBooking_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCarModelsWithId(int id)
         {
+            if (id < 1)
+            {
+                _logger.LogInformation($"Invalid id for {nameof(GetCarModelsWithId)}");
+                return BadRequest("Submitted data is invalid");
+            }
             try
             {
                 /*var carModels = await _unitofWork.CarModels.Get(q => q.Id == id, new List<string> { "Makes" });*/
@@ -78,9 +83,10 @@ namespace CarBooking_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateCarModel([FromBody] CreateCarModelDTO CarModelDTO)
         {
-            _logger.LogInformation($"Invalid POST Attempt for {nameof(CreateCarModel)}");
+            
             if (!ModelState.IsValid)
             {
+                _logger.LogInformation($"Invalid POST Attempt for {nameof(CreateCarModel)}");
                 return BadRequest(ModelState);
             }
 
@@ -107,9 +113,10 @@ namespace CarBooking_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateCarModel(int id, [FromBody] CarModelUpdateDTO CarModelDTO)
         {
-            _logger.LogInformation($"Invalid Update Attempt for {nameof(UpdateCarModel)}");
-            if (!ModelState.IsValid)
+            
+            if (!ModelState.IsValid || id < 1)
             {
+                _logger.LogInformation($"Invalid Update Attempt for {nameof(UpdateCarModel)}");
                 return BadRequest(ModelState);
             }
 
@@ -132,6 +139,40 @@ namespace CarBooking_API.Controllers
             {
                 _logger.LogError(ex, $"Something went wrong in the {nameof(UpdateCarModel)}");
                 return Problem($"Something went wrong in the {nameof(UpdateCarModel)}", statusCode: 500);
+                //return StatusCode(500, ex.ToString());                
+            }
+        }
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteCarModel(int id)
+        {
+            if (id < 1)
+            {
+                _logger.LogInformation($"Invalid delete Attempt for {nameof(DeleteCarModel)}");
+                return BadRequest("Submitted data is invalid");
+            }
+
+            try
+            {
+                var carmodel = await _unitofWork.CarModels.Get(a => a.Id == id);
+                if (carmodel == null)
+                {
+                    _logger.LogInformation($"Invalid delete Attempt for {nameof(DeleteCarModel)}");
+                    return BadRequest("Submitted data is invalid");
+                }
+                
+                await _unitofWork.CarModels.Delete(id);
+                await _unitofWork.Save();
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(DeleteCarModel)}");
+                return Problem($"Something went wrong in the {nameof(DeleteCarModel)}", statusCode: 500);
                 //return StatusCode(500, ex.ToString());                
             }
         }

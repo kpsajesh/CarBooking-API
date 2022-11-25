@@ -21,12 +21,14 @@ namespace CarBooking_API.Controllers
         private readonly IUnitofWork _unitofWork;
         private readonly ILogger<MakeController> _logger;
         private readonly IMapper _mapper;
+        private readonly CarBookingDbContext _context;
 
-        public MakeController(IUnitofWork unitofWork, ILogger<MakeController> logger, IMapper mapper)
+        public MakeController(IUnitofWork unitofWork, ILogger<MakeController> logger, IMapper mapper, CarBookingDbContext context)
         {
             _unitofWork = unitofWork;
             _logger = logger;
             _mapper = mapper;
+            _context = context;
         }
 
         //[Authorize]
@@ -50,12 +52,17 @@ namespace CarBooking_API.Controllers
             }
         }
 
-        [HttpGet("{id:int}", Name= "GetMakesWithId")]
+        [HttpGet("{id:int}", Name = "GetMakesWithId")]
         //[Route("GetMakesWithId")] // Can be used with a post method
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMakesWithId(int id)
         {
+            if (id < 1)
+            {
+                _logger.LogInformation($"Invalid id for {nameof(GetMakesWithId)}");
+                return BadRequest("Submitted data is invalid");
+            }
             try
             {
                 //var make = await _unitofWork.Makes.Get(q => q.Id == id, new List<string> { "CarModels" });
@@ -79,19 +86,20 @@ namespace CarBooking_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateMake([FromBody] CreateMakeDTO MakeDTO)
         {
-            _logger.LogInformation($"Invalid POST Attempt for {nameof(CreateMake)}");
+            
             if (!ModelState.IsValid)
             {
+                _logger.LogInformation($"Invalid POST Attempt for {nameof(CreateMake)}");
                 return BadRequest(ModelState);
             }
 
             try
             {
-                var make = _mapper.Map<Make> (MakeDTO);
+                var make = _mapper.Map<Make>(MakeDTO);
                 await _unitofWork.Makes.Insert(make); // Inserts the given data
                 await _unitofWork.Save(); // saves the insert
 
-                return CreatedAtRoute("GetMakesWithId", new {id =make.Id}, make); // calling the above API method GetMakesWithId to fetch the data of newly created record
+                return CreatedAtRoute("GetMakesWithId", new { id = make.Id }, make); // calling the above API method GetMakesWithId to fetch the data of newly created record
             }
             catch (Exception ex)
             {
@@ -107,9 +115,10 @@ namespace CarBooking_API.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> UpdateMake(int id, [FromBody] UpdateMakeDTO makeDTO)
         {
-            _logger.LogInformation($"Invalid Update Attempt for {nameof(UpdateMake)}");
-            if (!ModelState.IsValid)
+            
+            if (!ModelState.IsValid || id < 1)
             {
+                _logger.LogInformation($"Invalid Update Attempt for {nameof(UpdateMake)}");
                 return BadRequest(ModelState);
             }
 
@@ -132,6 +141,48 @@ namespace CarBooking_API.Controllers
             {
                 _logger.LogError(ex, $"Something went wrong in the {nameof(UpdateMake)}");
                 return Problem($"Something went wrong in the {nameof(UpdateMake)}", statusCode: 500);
+                //return StatusCode(500, ex.ToString());                
+            }
+        }
+
+        [HttpDelete("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteMake(int id)
+        {
+            if (id < 1)
+            {
+                _logger.LogInformation($"Invalid delete Attempt for {nameof(DeleteMake)}");
+                return BadRequest("Submitted data is invalid");
+            }
+
+            try
+            {
+                var make = await _unitofWork.Makes.Get(a => a.Id == id);
+                if (make == null)
+                {
+                    _logger.LogInformation($"Invalid delete Attempt for {nameof(DeleteMake)}");
+                    return BadRequest("Submitted data is invalid");
+                }
+
+                bool CarModelExists = await _context.CarModels.AnyAsync(m => m.MakeId == id);
+                if(CarModelExists)
+                {
+                    _logger.LogInformation($"Child exists in delete Attempt of id {id} for {nameof(DeleteMake)}");
+                    return BadRequest("Child record/s exists, please delete the child record/s first");
+                }
+
+                await _unitofWork.Makes.Delete(id);
+                await _unitofWork.Save();
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(DeleteMake)}");
+                return Problem($"Something went wrong in the {nameof(DeleteMake)}", statusCode: 500);
                 //return StatusCode(500, ex.ToString());                
             }
         }
