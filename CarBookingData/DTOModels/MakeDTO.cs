@@ -17,6 +17,16 @@ namespace CarBookingData.DTOModels
         public string? CreatedBy { get; set; }
         //public DateTime CreatedDate { get; set; }
     }
+    public class UpdateMakeDTO
+    {
+        [Required]
+        [Display(Name = "Make")]
+        public string? Name { get; set; }
+        public string? CreatedBy { get; set; }
+        //public DateTime CreatedDate { get; set; }
+        public IList<CreateCarModelDTO> CreateCarModel { get; set; }
+    }
+
 
     // This is for all other operations except create.
     // Can have seperate DTOs for each operations, ie one DTO for update all fields, another DTO for updating some specific fields 

@@ -100,6 +100,42 @@ namespace CarBooking_API.Controllers
             }
         }
 
+        //[Authorize(Roles = "Administrator")] // can authorise based on roles, policy
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateCarModel(int id, [FromBody] CarModelUpdateDTO CarModelDTO)
+        {
+            _logger.LogInformation($"Invalid Update Attempt for {nameof(UpdateCarModel)}");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var carmodel = await _unitofWork.CarModels.Get(a => a.Id == id);
+                if(carmodel == null)
+                {
+                    _logger.LogInformation($"Invalid Update Attempt for {nameof(UpdateCarModel)}");
+                    return BadRequest("Submitted data is invalid");
+                }
+                _mapper.Map(CarModelDTO, carmodel);
+                _unitofWork.CarModels.Update(carmodel);
+                await _unitofWork.Save();
+
+                return NoContent();
+                
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(UpdateCarModel)}");
+                return Problem($"Something went wrong in the {nameof(UpdateCarModel)}", statusCode: 500);
+                //return StatusCode(500, ex.ToString());                
+            }
+        }
+
 
     }
 }

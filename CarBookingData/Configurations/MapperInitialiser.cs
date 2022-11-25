@@ -18,6 +18,7 @@ namespace CarBookingData.Configurations
 
             CreateMap<Make, CreateMakeDTO>().ReverseMap();
             CreateMap<Make, MakeDTO>().ReverseMap();
+            CreateMap<Make, UpdateMakeDTO>().ReverseMap();
 
             CreateMap<CarModel, CarModelDTO>().ReverseMap();
             CreateMap<CarModel, CarModelAllInfoDTO>().ReverseMap();

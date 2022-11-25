@@ -101,5 +101,40 @@ namespace CarBooking_API.Controllers
             }
         }
 
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UpdateMake(int id, [FromBody] UpdateMakeDTO makeDTO)
+        {
+            _logger.LogInformation($"Invalid Update Attempt for {nameof(UpdateMake)}");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var make = await _unitofWork.Makes.Get(a => a.Id == id);
+                if (make == null)
+                {
+                    _logger.LogInformation($"Invalid Update Attempt for {nameof(UpdateMake)}");
+                    return BadRequest("Submitted data is invalid");
+                }
+                _mapper.Map(makeDTO, make);
+                _unitofWork.Makes.Update(make);
+                await _unitofWork.Save();
+
+                return NoContent();
+
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Something went wrong in the {nameof(UpdateMake)}");
+                return Problem($"Something went wrong in the {nameof(UpdateMake)}", statusCode: 500);
+                //return StatusCode(500, ex.ToString());                
+            }
+        }
+
     }
 }

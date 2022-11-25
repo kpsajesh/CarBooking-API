@@ -51,14 +51,16 @@ namespace CarBookingData.DTOModels
     
     public class CarModelUpdateDTO
     {
-        public int Id { get; set; }
+        //public int Id { get; set; }
         [Required]
         [Display(Name = "Car Model")]
         public string? Name { get; set; }
         [Required]
         public int MakeId { get; set; }// We need to pass only the PK of Make ID for create scenario
         public string? UpdatedBy { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        //public DateTime UpdatedDate { get; set; }
+        
+        //public IList<CreateMakeDTO> createMakes { get; set; }
     }
 
 }
