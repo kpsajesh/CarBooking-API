@@ -13,6 +13,8 @@ using CarBookingData.DataModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Diagnostics;
 using Serilog;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace CarBookingData.DataModels
 {
@@ -66,6 +68,17 @@ namespace CarBookingData.DataModels
                         }.ToString());
                     }
                 });
+            });
+        }
+
+        public static void ConfigureVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(opt =>
+            {
+                opt.ReportApiVersions = true; // It will inform the user which version you are using
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.DefaultApiVersion = new ApiVersion(1, 0); // sets the default version
+                //opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
         }
     }

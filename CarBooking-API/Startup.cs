@@ -42,7 +42,7 @@ namespace CarBooking_API
             });
 
             services.AddAuthentication();
-            services.ConfigureIdentity();
+            services.ConfigureIdentity();            
 
             services.ConfigureJWT(Configuration);
 
@@ -67,7 +67,9 @@ namespace CarBooking_API
             });
 
             services.AddControllers().AddNewtonsoftJson(op =>
-            op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                        op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+            
+            services.ConfigureVersioning();
 
         }
 
@@ -78,10 +80,12 @@ namespace CarBooking_API
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarBooking_API v1"));
 
             app.ConfigureExceptionHandler();
+            
 
             app.UseHttpsRedirection();
 
@@ -91,6 +95,8 @@ namespace CarBooking_API
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseApiVersioning();
 
             app.UseEndpoints(endpoints =>
             {

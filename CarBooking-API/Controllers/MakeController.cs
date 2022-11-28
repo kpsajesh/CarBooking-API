@@ -15,7 +15,9 @@ using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace CarBooking_API.Controllers
 {
+    [ApiVersion("1.0")]
     [Route("api/[controller]")]
+    //[Route("api/Make")]
     [ApiController]
     public class MakeController : ControllerBase
     {
