@@ -41,7 +41,7 @@ namespace CarBooking_API.Controllers
         {
             try
             {
-                /*BeforeActionEventData bringing the paging
+                /*Before bringing the paging
                 var makes = await _unitofWork.Makes.GetAll(); // Get all the filds from the Car model data class
                 var results = _mapper.Map<IList<MakeDTO>>(makes); // Using the DTO class, then we can control the fields to be exposed. The fields mentioned in the DTO only will be exposed if using DTO
                 return Ok(results); //OK status code is 200 and it is already associated*/
@@ -58,6 +58,7 @@ namespace CarBooking_API.Controllers
             }
         }
 
+        /*Before implementing Global error handling
         [HttpGet("{id:int}", Name = "GetMakesWithId")]
         //[Route("GetMakesWithId")] // Can be used with a post method
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -83,6 +84,25 @@ namespace CarBooking_API.Controllers
                 //return StatusCode(500, "Internal Server Error: Please try again later.");
                 return StatusCode(500, ex.ToString());
             }
+        }*/
+
+        [HttpGet("{id:int}", Name = "GetMakesWithId")]
+        //[Route("GetMakesWithId")] // Can be used with a post method
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> GetMakesWithId(int id)
+        {
+            if (id < 1)
+            {
+                _logger.LogInformation($"Invalid id for {nameof(GetMakesWithId)}");
+                return BadRequest("Submitted data is invalid");
+            }
+
+            //throw new Exception(); To check whether the global error handling is working or not. So this will log int he log file.
+
+            var make = await _unitofWork.Makes.Get(q => q.Id == id);
+            var result = _mapper.Map<MakeDTO>(make);
+            return Ok(result);
         }
 
         //[Authorize(Roles = "Administrator")] // can authorise based on roles, policy

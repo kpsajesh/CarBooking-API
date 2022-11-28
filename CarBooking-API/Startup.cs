@@ -81,6 +81,8 @@ namespace CarBooking_API
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarBooking_API v1"));
 
+            app.ConfigureExceptionHandler();
+
             app.UseHttpsRedirection();
 
             app.UseCors("AllowAll");// Applying the AllowAll rule defined above.

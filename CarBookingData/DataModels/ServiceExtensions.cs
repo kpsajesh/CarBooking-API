@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,6 +9,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using CarBookingData.DataModels;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Diagnostics;
+using Serilog;
 
 namespace CarBookingData.DataModels
 {
@@ -40,6 +45,27 @@ namespace CarBookingData.DataModels
                     ValidIssuer = jwtSettings.GetSection("Issuer").Value,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(ApiKey)),
                 };
+            });
+        }
+
+        public static void ConfigureExceptionHandler(this IApplicationBuilder app)
+        {
+            app.UseExceptionHandler(error => { // Overiding the default exception handler
+                error.Run(async context => { 
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+                    if(contextFeature != null)
+                    {
+                        Log.Error($"Something went wrong in the {contextFeature.Error}");
+                        
+                        await context.Response.WriteAsync(new Error
+                        {
+                            StatusCode = context.Response.StatusCode,
+                            Message ="Internal Server Error. Please try again later."
+                        }.ToString());
+                    }
+                });
             });
         }
     }
