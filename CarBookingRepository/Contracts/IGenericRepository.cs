@@ -1,6 +1,7 @@
 ﻿using CarBookingData;
+using CarBookingData.DataModels;
 using Microsoft.EntityFrameworkCore.Query;
-using PagedList;
+using X.PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,14 +24,15 @@ namespace CarBookingRepository.Contracts
             //List<string> include = null);
             Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null);
 
-        /*Task<IPagedList<TEntity>> GetPagedList(
+        Task<IPagedList<TEntity>> GetPagedList(
             RequestParams requestParams,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null
-            );*/
+            List <string> includes = null
+            );
         Task Insert(TEntity entity);
         Task InsertRange(IEnumerable<TEntity> entities);
         Task Delete(int id);
         void DeleteRange(IEnumerable<TEntity> entities);
         void Update(TEntity entity);
+        Task<bool> Exists(int id);
     }
 }

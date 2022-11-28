@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Win32;
 using CarBookingData.DataModels;
+using Microsoft.AspNetCore.Mvc.Diagnostics;
 
 namespace CarBooking_API.Controllers
 {
@@ -36,11 +37,16 @@ namespace CarBooking_API.Controllers
         //[Route("GetMakes")] // Can be used with a post method
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetMakes()
+        public async Task<IActionResult> GetMakes([FromQuery] RequestParams requestParams)// no need to have the fromquery parameters if no paging needed
         {
             try
             {
+                /*BeforeActionEventData bringing the paging
                 var makes = await _unitofWork.Makes.GetAll(); // Get all the filds from the Car model data class
+                var results = _mapper.Map<IList<MakeDTO>>(makes); // Using the DTO class, then we can control the fields to be exposed. The fields mentioned in the DTO only will be exposed if using DTO
+                return Ok(results); //OK status code is 200 and it is already associated*/
+
+                var makes = await _unitofWork.Makes.GetPagedList(requestParams); // Get all the filds from the Car model data class
                 var results = _mapper.Map<IList<MakeDTO>>(makes); // Using the DTO class, then we can control the fields to be exposed. The fields mentioned in the DTO only will be exposed if using DTO
                 return Ok(results); //OK status code is 200 and it is already associated
             }

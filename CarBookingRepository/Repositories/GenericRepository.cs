@@ -2,7 +2,7 @@
 using CarBookingRepository.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
-using PagedList;
+using X.PagedList;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
@@ -68,20 +68,24 @@ namespace CarBookingRepository.Repositories
         }
 
 
-        /*public async Task<IPagedList<TEntity>> GetPagedList(
+        public async Task<IPagedList<TEntity>> GetPagedList(
             RequestParams requestParams,
-            Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>> include = null
+            List<string> includes = null
             )
         {
             IQueryable<TEntity> query = _db;
 
-            if (include != null)
+            if (includes != null)
             {
-                query = include(query);
+                foreach (var includeProperty in includes)
+                {
+                    query = query.Include(includeProperty);
+                }
+                //query = includes(query);
             }
             return await query.AsNoTracking()
                 .ToPagedListAsync(requestParams.PageNumber, requestParams.PageSize);
-        }*/
+        }
 
 
         public async Task Insert(TEntity entity)
@@ -110,6 +114,11 @@ namespace CarBookingRepository.Repositories
         {
             _db.Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;
+        }
+
+        public Task<bool> Exists(int id)
+        {
+            throw new NotImplementedException();
         }
 
 
