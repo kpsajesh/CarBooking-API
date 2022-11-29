@@ -53,6 +53,7 @@ namespace CarBooking_API.Controllers
         //[Authorize]
         [HttpGet("{id:int}",Name = "GetCarModelsWithId")]
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [ResponseCache(Duration = 60)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetCarModelsWithId(int id)
         {

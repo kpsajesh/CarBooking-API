@@ -37,6 +37,8 @@ namespace CarBooking_API.Controllers
         //[Authorize]
         [HttpGet]
         //[Route("GetMakes")] // Can be used with a post method
+        //[ResponseCache(Duration = 60)] // this is removed because the named caching used as below
+        //[ResponseCache(CacheProfileName ="CacheDuration")]// removed ie it is implementd globally via Service extension & startup
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetMakes([FromQuery] RequestParams requestParams)// no need to have the fromquery parameters if no paging needed

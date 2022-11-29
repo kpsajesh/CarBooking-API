@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Diagnostics;
 using Serilog;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Marvin.Cache.Headers;
+using AspNetCoreRateLimit;
 
 namespace CarBookingData.DataModels
 {
@@ -80,6 +82,43 @@ namespace CarBookingData.DataModels
                 opt.DefaultApiVersion = new ApiVersion(1, 0); // sets the default version
                 //opt.ApiVersionReader = new HeaderApiVersionReader("api-version");
             });
+        }
+        public static void ConfigureHttpCacheheaders(this IServiceCollection services)
+        {
+            services.AddResponseCaching();
+            services.AddHttpCacheHeaders(
+                (expirationOpt) =>
+                {
+                    expirationOpt.MaxAge = 120;
+                    expirationOpt.CacheLocation = CacheLocation.Private;
+                },
+                (validationOpt) =>
+                {
+                    validationOpt.MustRevalidate=true;
+
+                }
+            );
+        }
+
+        public static void ConfigurerateLimiting(this IServiceCollection services)
+        {
+            var ratelimitRules = new List<RateLimitRule>
+            {
+                new RateLimitRule // this is the first rule can create multiple rules duplicating this block with comma seperation
+                {
+                    Endpoint ="*",//Says applicable to all API endpoints
+                    Limit =1,
+                    Period = "50s" // Says the API call is limited to once in 50 seconds, 10m is for 10 minutes
+                }
+            };
+            services.Configure<IpRateLimitOptions>(opt =>
+            {
+                opt.GeneralRules=ratelimitRules;
+            });
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
+            services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
+
         }
     }
 }

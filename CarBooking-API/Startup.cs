@@ -1,4 +1,5 @@
 //using CarBookingData;
+using AspNetCoreRateLimit;
 using CarBookingData.Configurations;
 using CarBookingData.DataModels;
 using CarBookingRepository.Contracts;
@@ -41,6 +42,13 @@ namespace CarBooking_API
                     Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddMemoryCache();
+            services.ConfigurerateLimiting();
+            services.AddHttpContextAccessor();
+
+            //services.AddResponseCaching();
+            services.ConfigureHttpCacheheaders();
+
             services.AddAuthentication();
             services.ConfigureIdentity();            
 
@@ -66,9 +74,18 @@ namespace CarBooking_API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Booking API", Version = "v1" });
             });
 
-            services.AddControllers().AddNewtonsoftJson(op =>
+            /* this was the existing, change implementing cache at high level
+             services.AddControllers().AddNewtonsoftJson(op => 
+                        op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);*/
+            //Caching is implemented as below
+            services.AddControllers(config => {
+                config.CacheProfiles.Add("CacheDuration", new CacheProfile
+                {
+                    Duration = 120
+                });
+            }).AddNewtonsoftJson(op =>
                         op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-            
+
             services.ConfigureVersioning();
 
         }
@@ -90,6 +107,11 @@ namespace CarBooking_API
             app.UseHttpsRedirection();
 
             app.UseCors("AllowAll");// Applying the AllowAll rule defined above.
+
+            app.UseResponseCaching();
+            app.UseHttpCacheHeaders();
+
+            //app.UseIpRateLimiting(); Throttling is not working. Enabling this leads to HTTP Error 500.30 - ASP.NET Core app failed to start
 
             app.UseRouting();
 
