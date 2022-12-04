@@ -6,6 +6,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +18,8 @@ namespace CarBooking_API
         {
             Log.Logger = new LoggerConfiguration() // To configure the SeriLog logging option
                 .WriteTo.File(
-                    path: "C:\\Logs\\CarBookingAPI\\log-.txt",
+                    path: "C:\\Logs\\CarBookingAPI\\log-.txt",//for the computer
+                    //Path: "logs\\log-.txt"//for deploying in Azure as there is no C:\ drive in Azure
                     outputTemplate: "{Timestamp:dd-MM-yyyy HH:MM:ss.fff zzz} [{Level:u3}] {Message:lj} {NewLine} {Exception}",
                     rollingInterval: RollingInterval.Day,
                     restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Information

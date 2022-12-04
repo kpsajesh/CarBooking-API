@@ -1,5 +1,4 @@
 //using CarBookingData;
-using AspNetCoreRateLimit;
 using CarBookingData.Configurations;
 using CarBookingData.DataModels;
 using CarBookingRepository.Contracts;
@@ -7,19 +6,12 @@ using CarBookingRepository.Repositories;
 using CarBookingRepository.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 
 namespace CarBooking_API
@@ -50,11 +42,12 @@ namespace CarBooking_API
             services.ConfigureHttpCacheheaders();
 
             services.AddAuthentication();
-            services.ConfigureIdentity();            
+            services.ConfigureIdentity();
 
             services.ConfigureJWT(Configuration);
 
-            services.AddCors(o => { // For Defining the access policy
+            services.AddCors(o =>
+            { // For Defining the access policy
                 o.AddPolicy("AllowAll", builder =>
                             builder.AllowAnyOrigin()
                             .AllowAnyMethod()
@@ -71,14 +64,15 @@ namespace CarBooking_API
 
             services.AddSwaggerGen(c => // Swagger automatically creates the API documentation for the developers who are using the API endpoints
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Booking API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Car Booking API", Version = "v1" }); 
             });
 
             /* this was the existing, change implementing cache at high level
              services.AddControllers().AddNewtonsoftJson(op => 
                         op.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);*/
             //Caching is implemented as below
-            services.AddControllers(config => {
+            services.AddControllers(config =>
+            {
                 config.CacheProfiles.Add("CacheDuration", new CacheProfile
                 {
                     Duration = 120
@@ -99,10 +93,18 @@ namespace CarBooking_API
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarBooking_API v1"));
+
+            //development version
+           // app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "CarBooking_API v1"));
+
+            //For deployment in production
+            app.UseSwaggerUI(c => {
+                string swaggerJsonBasepath = string.IsNullOrWhiteSpace(c.RoutePrefix) ? "." : "..";
+                c.SwaggerEndpoint($"{swaggerJsonBasepath}/swagger/v1/swagger.json", "CarBooking_API v1");
+                });
 
             app.ConfigureExceptionHandler();
-            
+
 
             app.UseHttpsRedirection();
 
